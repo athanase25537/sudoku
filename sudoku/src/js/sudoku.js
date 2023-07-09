@@ -1,6 +1,5 @@
 var numSelected = null;
 var tileSelected = null;
-
 var errors = 5;
 
 var board = [
@@ -66,6 +65,7 @@ function setGame() {
 }
 
 function selectNumber(){
+    click_btn();
     if (numSelected != null) {
         numSelected.classList.remove("number-selected");
     }
@@ -74,6 +74,11 @@ function selectNumber(){
 }
 
 function selectTile() {
+    // Animation Game Over or Win
+    let invalid_move_sound = document.querySelector('.invalid-move-sound');
+    let sudoku = document.getElementById("sudoku");
+
+    let winner = document.querySelector('.winner');
     if (numSelected) {
         if (this.innerText != "") {
             return;
@@ -85,16 +90,27 @@ function selectTile() {
         let c = parseInt(coords[1]);
 
         if (solution[r][c] == numSelected.id) {
+            click_btn();
             this.innerText = numSelected.id;
         }
         else {
+            invalid_move_sound.play();
             this.classList.add('error');
             setTimeout(()=>{
                 this.classList.remove('error')
             }, 500);
+            if(errors==1){
+                sudoku.classList.add('end');
+                winner.classList.remove('no-winner');
+            }
             errors --;
             document.getElementById("errors").innerText = "Sisa: " + errors;
         }
     }
+}
+
+function click_btn(){
+    let btn_click = document.querySelector('.btn-click');
+    btn_click.play();
 }
 
